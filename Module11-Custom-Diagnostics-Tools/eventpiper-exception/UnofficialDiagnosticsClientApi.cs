@@ -1,7 +1,7 @@
 ﻿using Microsoft.Diagnostics.NETCore.Client;
 using System;
 using System.Reflection;
-
+using System.Threading.Tasks;
 using ReversedServer = System.Object;
 
 namespace eventpiper
@@ -13,6 +13,7 @@ namespace eventpiper
         static readonly Type reversedServerType = diagClientType.Assembly.GetType("Microsoft.Diagnostics.NETCore.Client.ReversedDiagnosticsServer");
         static readonly MethodInfo serverStart = reversedServerType.GetMethod("Start", Array.Empty<Type>());
         static readonly MethodInfo serverAccept = reversedServerType.GetMethod("Accept");
+        static readonly MethodInfo disposeAsync = reversedServerType.GetMethod("DisposeAsync");
 
         static readonly Type ipcEndpointInfoType = diagClientType.Assembly.GetType("Microsoft.Diagnostics.NETCore.Client.IpcEndpointInfo");
         static readonly PropertyInfo ipcEndpointInfoEndpointProperty = ipcEndpointInfoType.GetProperty("Endpoint");
@@ -27,6 +28,10 @@ namespace eventpiper
         public static void Start(ReversedServer server)
         {
             serverStart.Invoke(server, Array.Empty<object>());
+        }
+
+        public static ValueTask DisposeAsync(ReversedServer server) {
+            return (ValueTask)disposeAsync.Invoke(server, Array.Empty<object>());
         }
 
         public static DiagnosticsClient WaitForProcessToConnect(ReversedServer server, int pid)
