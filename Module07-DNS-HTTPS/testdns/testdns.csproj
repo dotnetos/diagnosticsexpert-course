@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DNS" Version="6.1.0" />
+    <PackageReference Include="DNS" Version="7.0.0" />
     <PackageReference Include="Hexify" Version="1.2.2" />
   </ItemGroup>
 
